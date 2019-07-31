@@ -55,7 +55,18 @@ namespace UnizenBot.Meta
         /// <returns>How well this mechanism's name matches a string search.</returns>
         public SearchMatchLevel Matches(string input)
         {
-            string name = Object.Value.ToLower() + "." + Name.Value.ToLower();
+            string obj = Object.Value.ToLower();
+            if (obj.EndsWith("tag"))
+            {
+                obj = obj.Substring(0, obj.Length - "tag".Length);
+            }
+            string name = obj + "." + Name.Value.ToLower();
+            input = input.ToLower();
+            int tagdot = input.IndexOf("tag.");
+            if (tagdot > 0) // somethingtag.blah -> something.blah
+            {
+                input = input.Substring(0, tagdot) + input.Substring(tagdot + "tag".Length);
+            }
             if (input == name)
             {
                 return SearchMatchLevel.EXACT;
