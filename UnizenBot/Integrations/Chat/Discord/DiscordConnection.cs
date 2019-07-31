@@ -181,6 +181,10 @@ namespace UnizenBot.Integrations.Chat.Discord
                 if (propertyValue is SingleObject<string> single)
                 {
                     string value = single.Value;
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        continue;
+                    }
                     if (property.Code)
                     {
                         value = $"```{property.CodeExtension}\n{value}\n```";
