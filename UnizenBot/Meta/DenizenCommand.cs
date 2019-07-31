@@ -55,7 +55,7 @@ namespace UnizenBot.Meta
         /// <summary>
         /// The example usages of the command.
         /// </summary>
-        [MetaProperty(Display = "Usage", Position = 7, ForceNextPage = true, PerPage = 2)]
+        [MetaProperty(Display = "Usage", Position = 7, Code = true, ForceNextPage = true, PerPage = 2)]
         public ListObject<string> Usage { get; set; }
 
         /// <summary>
