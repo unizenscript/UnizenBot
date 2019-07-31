@@ -73,7 +73,15 @@ namespace UnizenBot.Meta
                 tag = first + second;
                 open = tag.IndexOf('[');
             }
-            return tag.Substring(tag.IndexOf('@') + 1);
+            int tagdot = tag.IndexOf("tag.");
+            if (tagdot > 0 && tagdot < tag.IndexOf('.')) // somethingtag.blah -> something.blah
+            {
+                return tag.Substring(0, tagdot) + tag.Substring(tagdot + "tag".Length);
+            }
+            else
+            {
+                return tag.Substring(tag.IndexOf('@') + 1);
+            }
         }
 
         /// <summary>
