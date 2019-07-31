@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace UnizenBot.Integrations.Chat.Discord
 {
@@ -184,6 +185,10 @@ namespace UnizenBot.Integrations.Chat.Discord
                     {
                         value = $"```{property.CodeExtension}\n{value}\n```";
                     }
+                    else
+                    {
+                        value = Regex.Replace(value, "<@link [^\\s]+ ([^>]+)>", "$1");
+                    }
                     if (value.Length > 1000)
                     {
                         int pos = 0;
@@ -214,6 +219,8 @@ namespace UnizenBot.Integrations.Chat.Discord
                     }
                     else
                     {
+                        bool inCode = false;
+                        ParseCode(ref value, ref inCode, property.CodeExtension);
                         builder.AddField(new EmbedFieldBuilder().WithName(property.Display).WithValue(value).WithIsInline(property.Inline));
                     }
                 }
@@ -259,16 +266,20 @@ namespace UnizenBot.Integrations.Chat.Discord
                 text = "```" + extension + "\n" + text;
             }
             int codeStart = text.IndexOf("<code>");
+            if (!inCode && codeStart == -1)
+            {
+                text = text.Replace(">", "\\>").Replace("[", "\\[").Replace("(", "\\(");
+            }
             while (inCode || codeStart >= 0)
             {
                 if (!inCode)
                 {
-                    text = text.Substring(0, codeStart) + "```" + extension + "\n" + text.Substring(codeStart + "<code>".Length);
+                    text = text.Replace("\\>", ">").Replace("\\[", "[").Replace("\\(", "(").Substring(0, codeStart) + "```" + extension + "\n" + text.Substring(codeStart + "<code>".Length);
                 }
                 int codeEnd = text.IndexOf("</code>");
                 if (codeEnd >= 0)
                 {
-                    text = text.Substring(0, codeEnd) + "\n```" + text.Substring(codeEnd + "</code>".Length);
+                    text = text.Substring(0, codeEnd) + "\n```" + text.Substring(codeEnd + "</code>".Length).Replace(">", "\\>").Replace("[", "\\[").Replace("(", "\\("); ;
                     codeStart = text.IndexOf("<code>", codeEnd);
                     inCode = false;
                 }
