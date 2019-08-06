@@ -195,8 +195,9 @@ namespace UnizenBot
         /// <typeparam name="T">The meta type.</typeparam>
         /// <param name="searchInput">The search input.</param>
         /// <param name="command">The command that initiated this search.</param>
+        /// <param name="listOnly">Whether to only allow a list of results, rather than replying with exact or only matches.</param>
         /// <returns>Whether any results were found.</returns>
-        public async Task<bool> HandleSearch<T>(string searchInput, BotCommand command) where T : IDenizenMetaType
+        public async Task<bool> HandleSearch<T>(string searchInput, BotCommand command, bool listOnly = false) where T : IDenizenMetaType
         {
             IEnumerable<SearchResult<T>> results = Meta.Search<T>(searchInput).OrderByDescending((x) => x.MatchLevel);
             SearchResult<T> first = results.FirstOrDefault();
@@ -204,7 +205,7 @@ namespace UnizenBot
             {
                 return false;
             }
-            else if (first.MatchLevel == SearchMatchLevel.EXACT || results.ElementAtOrDefault(1).Result == null)
+            else if (!listOnly && (first.MatchLevel == SearchMatchLevel.EXACT || results.ElementAtOrDefault(1).Result == null))
             {
                 await command.ReplyAsync(new DenizenMetaMessage(first.Result, first.MatchLevel));
                 return true;

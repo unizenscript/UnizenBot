@@ -165,7 +165,7 @@ namespace UnizenBot.Integrations.Chat.Discord
         public DiscordPaginatedMessage GetPaginatedMeta(DenizenMetaMessage meta)
         {
             List<Embed> pages = new List<Embed>();
-            string title = MetaCommands.AdaptMatchLevel(meta.MatchLevel);
+            string title = MetaCommands.AdaptMatchLevel(meta.MatchLevel) + " - " + Bot.Meta.KnownMetaTypeNames[meta.Meta.GetType()];
             EmbedBuilder builder = new EmbedBuilder().WithColor(Color.Green).WithTitle(title);
             foreach (MetaPropertyAttribute property in Bot.Meta.MetaTypeProperties[meta.Meta.GetType()].Values.OrderBy((x) => x.Position))
             {

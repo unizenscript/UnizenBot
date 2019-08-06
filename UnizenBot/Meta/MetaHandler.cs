@@ -25,6 +25,11 @@ namespace UnizenBot.Meta
         public Dictionary<string, Type> KnownMetaTypes;
 
         /// <summary>
+        /// All registered Denizen meta type names.
+        /// </summary>
+        public Dictionary<Type, string> KnownMetaTypeNames;
+
+        /// <summary>
         /// The parameterless constructors of registered Denizen meta types.
         /// </summary>
         public Dictionary<Type, ConstructorInfo> MetaTypeConstructors;
@@ -47,6 +52,7 @@ namespace UnizenBot.Meta
         {
             Settings = settings;
             KnownMetaTypes = new Dictionary<string, Type>();
+            KnownMetaTypeNames = new Dictionary<Type, string>();
             MetaTypeConstructors = new Dictionary<Type, ConstructorInfo>();
             MetaTypeProperties = new Dictionary<Type, Dictionary<string, MetaPropertyAttribute>>();
             KnownMeta = new Dictionary<Type, List<IDenizenMetaType>>();
@@ -95,7 +101,9 @@ namespace UnizenBot.Meta
                 }
             }
             MetaTypeProperties.Add(type, properties);
-            KnownMetaTypes.Add(name.ToLower(), type);
+            name = name.ToLower();
+            KnownMetaTypes.Add(name, type);
+            KnownMetaTypeNames.Add(type, name);
         }
 
         private object ReloadLock = new object();

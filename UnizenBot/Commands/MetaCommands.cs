@@ -185,7 +185,7 @@ namespace UnizenBot.Commands
         /// Searches all meta documentation.
         /// </summary>
         [CommandHandler("search", "s")]
-        public static async Task SearchAll(BotCommand command)
+        public static async Task GeneralSearch(BotCommand command)
         {
             string search = command.Arguments.Stringify((x) => x, " ").ToLower();
             if (string.IsNullOrWhiteSpace(search))
@@ -205,6 +205,36 @@ namespace UnizenBot.Commands
                 search = search.Substring(1);
             }
             if (!await command.Bot.HandleSearch<IDenizenMetaType>(search, command))
+            {
+                await command.ReplyAsync(new DiscordEmbedMessage(new EmbedBuilder().WithColor(Color.Red)
+                    .WithDescription("No meta was found matching the specified input. :pensive:").Build()));
+            }
+        }
+
+        /// <summary>
+        /// Searches all meta documentation and never returns an exact result.
+        /// </summary>
+        [CommandHandler("searchall", "sa")]
+        public static async Task GeneralSearchAll(BotCommand command)
+        {
+            string search = command.Arguments.Stringify((x) => x, " ").ToLower();
+            if (string.IsNullOrWhiteSpace(search))
+            {
+                return;
+            }
+            if (search == "all")
+            {
+                List<Embed> pages = command.Bot.Meta.AllOf<IDenizenMetaType>().Paginate((meta) => meta.GetListString())
+                    .Select((page) => new EmbedBuilder().WithColor(Color.Gold).WithTitle("All known meta").WithDescription(page).Build())
+                    .ToList();
+                await command.ReplyAsync(new DiscordPaginatedMessage(pages));
+                return;
+            }
+            if (search.StartsWith('\\'))
+            {
+                search = search.Substring(1);
+            }
+            if (!await command.Bot.HandleSearch<IDenizenMetaType>(search, command, true))
             {
                 await command.ReplyAsync(new DiscordEmbedMessage(new EmbedBuilder().WithColor(Color.Red)
                     .WithDescription("No meta was found matching the specified input. :pensive:").Build()));
