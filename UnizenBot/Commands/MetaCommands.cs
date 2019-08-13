@@ -112,6 +112,8 @@ namespace UnizenBot.Commands
         {
             switch (matchLevel)
             {
+                case SearchMatchLevel.BACKUP:
+                    return "Backup match";
                 case SearchMatchLevel.PARTIAL:
                     return "Partial match";
                 case SearchMatchLevel.SIMILAR:

@@ -14,6 +14,10 @@ namespace UnizenBot.Meta
         /// </summary>
         NONE,
         /// <summary>
+        /// The data should only be used as a backup.
+        /// </summary>
+        BACKUP,
+        /// <summary>
         /// The data only partially matches.
         /// </summary>
         PARTIAL,

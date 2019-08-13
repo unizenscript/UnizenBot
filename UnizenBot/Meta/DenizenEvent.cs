@@ -110,6 +110,10 @@ namespace UnizenBot.Meta
                     return SearchMatchLevel.PARTIAL;
                 }
             }
+            if (input.Length > 3 && Triggers.Value.ToLower().Contains(input))
+            {
+                return SearchMatchLevel.BACKUP;
+            }
             return SearchMatchLevel.NONE;
         }
     }
