@@ -197,18 +197,46 @@ namespace UnizenBot
         /// <param name="command">The command that initiated this search.</param>
         /// <param name="listOnly">Whether to only allow a list of results, rather than replying with exact or only matches.</param>
         /// <returns>Whether any results were found.</returns>
-        public async Task<bool> HandleSearch<T>(string searchInput, BotCommand command, bool listOnly = false) where T : IDenizenMetaType
+        public async Task HandleSearch<T>(string searchInput, BotCommand command, bool listOnly = false) where T : IDenizenMetaType
         {
+            searchInput = searchInput.ToLower();
+            if (string.IsNullOrWhiteSpace(searchInput))
+            {
+                return;
+            }
+            if (searchInput == "all")
+            {
+                List<Embed> pages = command.Bot.Meta.AllOf<T>().Paginate((tag) => tag.GetListString())
+                    .Select((page) => new EmbedBuilder().WithColor(Color.Gold).WithTitle("All known " + Meta.KnownMetaTypeNames[typeof(T)] + "s").WithDescription(page).Build())
+                    .ToList();
+                await command.ReplyAsync(new DiscordPaginatedMessage(pages));
+                return;
+            }
+            if (searchInput.StartsWith('\\'))
+            {
+                searchInput = searchInput.Substring(1);
+            }
             IEnumerable<SearchResult<T>> results = Meta.Search<T>(searchInput).OrderByDescending((x) => x.MatchLevel);
             SearchResult<T> first = results.FirstOrDefault();
             if (first.Result == null)
             {
-                return false;
+                Type type = typeof(T);
+                string error;
+                if (type == typeof(IDenizenMetaType))
+                {
+                    error = "Nothing was found matching the specified input. :pensive:";
+                }
+                else
+                {
+                    error = "No " + Meta.KnownMetaTypeNames[typeof(T)] + "s were found matching the specified input. :pensive:";
+                }
+                await command.ReplyAsync(new DiscordEmbedMessage(new EmbedBuilder().WithColor(Color.Red).WithDescription(error).Build()));
+                return;
             }
             else if (!listOnly && (first.MatchLevel == SearchMatchLevel.EXACT || results.ElementAtOrDefault(1).Result == null))
             {
                 await command.ReplyAsync(new DenizenMetaMessage(first.Result, first.MatchLevel));
-                return true;
+                return;
             }
             else
             {
@@ -259,7 +287,7 @@ namespace UnizenBot
                 builder.AddField(field.WithValue(value.Substring(0, length - 2)));
                 pages.Add(builder.Build());
                 await command.ReplyAsync(new DiscordPaginatedMessage(pages));
-                return true;
+                return;
             }
         }
     }

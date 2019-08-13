@@ -23,28 +23,7 @@ namespace UnizenBot.Commands
         [CommandHandler("command", "cmd", "c")]
         public static async Task SearchCommands(BotCommand command)
         {
-            string searchCmd = command.Arguments[0].ToLower();
-            if (string.IsNullOrWhiteSpace(searchCmd))
-            {
-                return;
-            }
-            if (searchCmd == "all")
-            {
-                List<Embed> pages = command.Bot.Meta.AllOf<DenizenCommand>().Paginate((cmd) => cmd.GetListString())
-                    .Select((page) => new EmbedBuilder().WithColor(Color.Gold).WithTitle("All known commands").WithDescription(page).Build())
-                    .ToList();
-                await command.ReplyAsync(new DiscordPaginatedMessage(pages));
-                return;
-            }
-            if (searchCmd.StartsWith('\\'))
-            {
-                searchCmd = searchCmd.Substring(1);
-            }
-            if (!await command.Bot.HandleSearch<DenizenCommand>(searchCmd, command))
-            {
-                await command.ReplyAsync(new DiscordEmbedMessage(new EmbedBuilder().WithColor(Color.Red)
-                    .WithDescription("No commands were found matching the specified input. :pensive:").Build()));
-            }
+            await command.Bot.HandleSearch<DenizenCommand>(command.Arguments[0], command);
         }
 
         /// <summary>
@@ -53,24 +32,7 @@ namespace UnizenBot.Commands
         [CommandHandler("tag", "t")]
         public static async Task SearchTags(BotCommand command)
         {
-            string searchTag = command.Arguments[0].ToLower();
-            if (searchTag == "all")
-            {
-                List<Embed> pages = command.Bot.Meta.AllOf<DenizenTag>().Paginate((tag) => tag.GetListString())
-                    .Select((page) => new EmbedBuilder().WithColor(Color.Gold).WithTitle("All known tags").WithDescription(page).Build())
-                    .ToList();
-                await command.ReplyAsync(new DiscordPaginatedMessage(pages));
-                return;
-            }
-            if (searchTag.StartsWith('\\'))
-            {
-                searchTag = searchTag.Substring(1);
-            }
-            if (!await command.Bot.HandleSearch<DenizenTag>(searchTag, command))
-            {
-                await command.ReplyAsync(new DiscordEmbedMessage(new EmbedBuilder().WithColor(Color.Red)
-                    .WithDescription("No tags were found matching the specified input. :pensive:").Build()));
-            }
+            await command.Bot.HandleSearch<DenizenTag>(command.Arguments[0], command);
         }
 
         /// <summary>
@@ -79,24 +41,7 @@ namespace UnizenBot.Commands
         [CommandHandler("mechanism", "mech", "mec", "m")]
         public static async Task SearchMechanisms(BotCommand command)
         {
-            string searchMech = command.Arguments[0].ToLower();
-            if (searchMech == "all")
-            {
-                List<Embed> pages = command.Bot.Meta.AllOf<DenizenMechanism>().Paginate((mech) => mech.GetListString())
-                    .Select((page) => new EmbedBuilder().WithColor(Color.Gold).WithTitle("All known mechanisms").WithDescription(page).Build())
-                    .ToList();
-                await command.ReplyAsync(new DiscordPaginatedMessage(pages));
-                return;
-            }
-            if (searchMech.StartsWith('\\'))
-            {
-                searchMech = searchMech.Substring(1);
-            }
-            if (!await command.Bot.HandleSearch<DenizenMechanism>(searchMech, command))
-            {
-                await command.ReplyAsync(new DiscordEmbedMessage(new EmbedBuilder().WithColor(Color.Red)
-                    .WithDescription("No mechanisms were found matching the specified input. :pensive:").Build()));
-            }
+            await command.Bot.HandleSearch<DenizenMechanism>(command.Arguments[0], command);
         }
 
         /// <summary>
@@ -105,24 +50,7 @@ namespace UnizenBot.Commands
         [CommandHandler("event", "evt", "e")]
         public static async Task SearchEvents(BotCommand command)
         {
-            string searchEvent = command.Arguments.Stringify((x) => x, " ").ToLower();
-            if (searchEvent == "all")
-            {
-                List<Embed> pages = command.Bot.Meta.AllOf<DenizenEvent>().Paginate((evt) => evt.GetListString())
-                    .Select((page) => new EmbedBuilder().WithColor(Color.Gold).WithTitle("All known events").WithDescription(page).Build())
-                    .ToList();
-                await command.ReplyAsync(new DiscordPaginatedMessage(pages));
-                return;
-            }
-            if (searchEvent.StartsWith('\\'))
-            {
-                searchEvent = searchEvent.Substring(1);
-            }
-            if (!await command.Bot.HandleSearch<DenizenEvent>(searchEvent, command))
-            {
-                await command.ReplyAsync(new DiscordEmbedMessage(new EmbedBuilder().WithColor(Color.Red)
-                    .WithDescription("No events were found matching the specified input. :pensive:").Build()));
-            }
+            await command.Bot.HandleSearch<DenizenEvent>(command.Arguments.Stringify((x) => x, " "), command);
         }
 
         /// <summary>
@@ -131,24 +59,7 @@ namespace UnizenBot.Commands
         [CommandHandler("action", "act", "a")]
         public static async Task SearchActions(BotCommand command)
         {
-            string searchAction = command.Arguments.Stringify((x) => x, " ").ToLower();
-            if (searchAction == "all")
-            {
-                List<Embed> pages = command.Bot.Meta.AllOf<DenizenAction>().Paginate((action) => action.GetListString())
-                    .Select((page) => new EmbedBuilder().WithColor(Color.Gold).WithTitle("All known actions").WithDescription(page).Build())
-                    .ToList();
-                await command.ReplyAsync(new DiscordPaginatedMessage(pages));
-                return;
-            }
-            if (searchAction.StartsWith('\\'))
-            {
-                searchAction = searchAction.Substring(1);
-            }
-            if (!await command.Bot.HandleSearch<DenizenAction>(searchAction, command))
-            {
-                await command.ReplyAsync(new DiscordEmbedMessage(new EmbedBuilder().WithColor(Color.Red)
-                    .WithDescription("No actions were found matching the specified input. :pensive:").Build()));
-            }
+            await command.Bot.HandleSearch<DenizenAction>(command.Arguments.Stringify((x) => x, " "), command);
         }
 
         /// <summary>
@@ -157,28 +68,7 @@ namespace UnizenBot.Commands
         [CommandHandler("language", "lang", "lng", "l")]
         public static async Task SearchLanguages(BotCommand command)
         {
-            string searchLang = command.Arguments.Stringify((x) => x, " ").ToLower();
-            if (string.IsNullOrWhiteSpace(searchLang))
-            {
-                return;
-            }
-            if (searchLang == "all")
-            {
-                List<Embed> pages = command.Bot.Meta.AllOf<DenizenLanguage>().Paginate((lang) => lang.GetListString())
-                    .Select((page) => new EmbedBuilder().WithColor(Color.Gold).WithTitle("All known language explanations").WithDescription(page).Build())
-                    .ToList();
-                await command.ReplyAsync(new DiscordPaginatedMessage(pages));
-                return;
-            }
-            if (searchLang.StartsWith('\\'))
-            {
-                searchLang = searchLang.Substring(1);
-            }
-            if (!await command.Bot.HandleSearch<DenizenLanguage>(searchLang, command))
-            {
-                await command.ReplyAsync(new DiscordEmbedMessage(new EmbedBuilder().WithColor(Color.Red)
-                    .WithDescription("No language explanations were found matching the specified input. :pensive:").Build()));
-            }
+            await command.Bot.HandleSearch<DenizenLanguage>(command.Arguments.Stringify((x) => x, " "), command);
         }
 
         /// <summary>
@@ -187,28 +77,7 @@ namespace UnizenBot.Commands
         [CommandHandler("search", "s")]
         public static async Task GeneralSearch(BotCommand command)
         {
-            string search = command.Arguments.Stringify((x) => x, " ").ToLower();
-            if (string.IsNullOrWhiteSpace(search))
-            {
-                return;
-            }
-            if (search == "all")
-            {
-                List<Embed> pages = command.Bot.Meta.AllOf<IDenizenMetaType>().Paginate((meta) => meta.GetListString())
-                    .Select((page) => new EmbedBuilder().WithColor(Color.Gold).WithTitle("All known meta").WithDescription(page).Build())
-                    .ToList();
-                await command.ReplyAsync(new DiscordPaginatedMessage(pages));
-                return;
-            }
-            if (search.StartsWith('\\'))
-            {
-                search = search.Substring(1);
-            }
-            if (!await command.Bot.HandleSearch<IDenizenMetaType>(search, command))
-            {
-                await command.ReplyAsync(new DiscordEmbedMessage(new EmbedBuilder().WithColor(Color.Red)
-                    .WithDescription("No meta was found matching the specified input. :pensive:").Build()));
-            }
+            await command.Bot.HandleSearch<IDenizenMetaType>(command.Arguments.Stringify((x) => x, " "), command);
         }
 
         /// <summary>
@@ -217,28 +86,7 @@ namespace UnizenBot.Commands
         [CommandHandler("searchall", "sa")]
         public static async Task GeneralSearchAll(BotCommand command)
         {
-            string search = command.Arguments.Stringify((x) => x, " ").ToLower();
-            if (string.IsNullOrWhiteSpace(search))
-            {
-                return;
-            }
-            if (search == "all")
-            {
-                List<Embed> pages = command.Bot.Meta.AllOf<IDenizenMetaType>().Paginate((meta) => meta.GetListString())
-                    .Select((page) => new EmbedBuilder().WithColor(Color.Gold).WithTitle("All known meta").WithDescription(page).Build())
-                    .ToList();
-                await command.ReplyAsync(new DiscordPaginatedMessage(pages));
-                return;
-            }
-            if (search.StartsWith('\\'))
-            {
-                search = search.Substring(1);
-            }
-            if (!await command.Bot.HandleSearch<IDenizenMetaType>(search, command, true))
-            {
-                await command.ReplyAsync(new DiscordEmbedMessage(new EmbedBuilder().WithColor(Color.Red)
-                    .WithDescription("No meta was found matching the specified input. :pensive:").Build()));
-            }
+            await command.Bot.HandleSearch<IDenizenMetaType>(command.Arguments.Stringify((x) => x, " "), command, true);
         }
 
         /// <summary>
