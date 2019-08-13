@@ -39,7 +39,7 @@ namespace UnizenBot.Meta
         /// </summary>
         public string GetListString()
         {
-            return Actions.Value.Split('\n').Stringify((actionName) => actionName);
+            return "!a " + Actions.Value.Split('\n').Stringify((actionName) => actionName, ", !a ");
         }
 
         /// <summary>

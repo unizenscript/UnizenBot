@@ -33,7 +33,7 @@ namespace UnizenBot.Meta
         /// </summary>
         public string GetListString()
         {
-            return Name.Value;
+            return "!l " + Name.Value;
         }
 
         /// <summary>

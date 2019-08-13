@@ -45,7 +45,7 @@ namespace UnizenBot.Meta
         /// </summary>
         public string GetListString()
         {
-            return Object.Value + "." + Name.Value;
+            return "!m " + Object.Value + "." + Name.Value;
         }
 
         /// <summary>

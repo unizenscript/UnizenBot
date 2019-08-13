@@ -57,7 +57,7 @@ namespace UnizenBot.Meta
         /// </summary>
         public string GetListString()
         {
-            return Events.Value.Split('\n').Stringify((evtName) => evtName);
+            return "!e " + Events.Value.Split('\n').Stringify((evtName) => evtName, ", !e ");
         }
 
         private Regex CachedRegex;

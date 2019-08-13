@@ -51,7 +51,7 @@ namespace UnizenBot.Meta
         /// </summary>
         public string GetListString()
         {
-            return Attribute.Value;
+            return "!t " + Attribute.Value;
         }
 
         private string StripTag(string tag)

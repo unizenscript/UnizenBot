@@ -69,7 +69,7 @@ namespace UnizenBot.Meta
         /// </summary>
         public string GetListString()
         {
-            return Name.Value;
+            return "!c " + Name.Value;
         }
 
         /// <summary>
