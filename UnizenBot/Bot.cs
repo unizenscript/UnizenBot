@@ -258,7 +258,7 @@ namespace UnizenBot
                             value = string.Empty;
                             length = 0;
                         }
-                        field = new EmbedFieldBuilder().WithName(MetaCommands.AdaptMatchLevel(result.MatchLevel) + "es");
+                        field = new EmbedFieldBuilder().WithName(MetaCommands.AdaptMatchLevelPlural(result.MatchLevel));
                         lastLevel = result.MatchLevel;
                         if (pageLength > 1250)
                         {
@@ -273,7 +273,7 @@ namespace UnizenBot
                         builder.AddField(field.WithValue(value.Substring(0, length - 2)));
                         pages.Add(builder.Build());
                         builder = new EmbedBuilder().WithColor(Color.Gold);
-                        field = new EmbedFieldBuilder().WithName(MetaCommands.AdaptMatchLevel(result.MatchLevel) + "es [Continued]");
+                        field = new EmbedFieldBuilder().WithName(MetaCommands.AdaptMatchLevelPlural(result.MatchLevel) + " [Continued]");
                         pageLength = 0;
                         value = next;
                         length = next.Length;

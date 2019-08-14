@@ -54,6 +54,7 @@ namespace UnizenBot.Meta
             {
                 input = input.Substring("on ".Length);
             }
+            SearchMatchLevel tentative = SearchMatchLevel.NONE;
             foreach (string evnt in Actions.Value.Split('\n'))
             {
                 string evt = evnt.ToLower();
@@ -66,19 +67,27 @@ namespace UnizenBot.Meta
                     int lengthDiff = evt.Length - input.Length;
                     if (lengthDiff > 0 && lengthDiff <= 3)
                     {
-                        return SearchMatchLevel.VERY_SIMILAR;
+                        tentative = EnumHelper.Max(tentative, SearchMatchLevel.VERY_SIMILAR);
                     }
                     else
                     {
-                        return SearchMatchLevel.SIMILAR;
+                        tentative = EnumHelper.Max(tentative, SearchMatchLevel.SIMILAR);
                     }
                 }
                 else if (evt.Contains(input))
                 {
-                    return SearchMatchLevel.PARTIAL;
+                    tentative = EnumHelper.Max(tentative, SearchMatchLevel.PARTIAL);
+                }
+                else if (Util.IsTextSimilar(evt, input))
+                {
+                    tentative = EnumHelper.Max(tentative, SearchMatchLevel.DID_YOU_MEAN);
                 }
             }
-            return SearchMatchLevel.NONE;
+            if (input.Length > 3 && Triggers.Value.ToLower().Contains(input))
+            {
+                tentative = EnumHelper.Max(tentative, SearchMatchLevel.BACKUP);
+            }
+            return tentative;
         }
     }
 }

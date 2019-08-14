@@ -20,5 +20,17 @@ namespace UnizenBot.Utilities
         {
             return first.CompareTo(second) <= 0 ? first : second;
         }
+
+        /// <summary>
+        /// Returns the comparitively highest of two enum values, using <see cref="IComparable.CompareTo(object)"/>
+        /// </summary>
+        /// <typeparam name="T">The enum.</typeparam>
+        /// <param name="first">The first value.</param>
+        /// <param name="second">The second value.</param>
+        /// <returns>The highest of the two.</returns>
+        public static T Max<T>(T first, T second) where T : Enum
+        {
+            return first.CompareTo(second) >= 0 ? first : second;
+        }
     }
 }

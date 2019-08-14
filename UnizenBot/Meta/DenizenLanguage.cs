@@ -64,6 +64,10 @@ namespace UnizenBot.Meta
             {
                 return SearchMatchLevel.PARTIAL;
             }
+            else if (Util.IsTextSimilar(name, input))
+            {
+                return SearchMatchLevel.DID_YOU_MEAN;
+            }
             else
             {
                 return SearchMatchLevel.NONE;

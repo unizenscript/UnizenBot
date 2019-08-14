@@ -14,6 +14,10 @@ namespace UnizenBot.Meta
         /// </summary>
         NONE,
         /// <summary>
+        /// The input could have been intended to be this data.
+        /// </summary>
+        DID_YOU_MEAN,
+        /// <summary>
         /// The data should only be used as a backup.
         /// </summary>
         BACKUP,

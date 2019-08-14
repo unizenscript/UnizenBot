@@ -112,6 +112,8 @@ namespace UnizenBot.Commands
         {
             switch (matchLevel)
             {
+                case SearchMatchLevel.DID_YOU_MEAN:
+                    return "Did you mean";
                 case SearchMatchLevel.BACKUP:
                     return "Backup match";
                 case SearchMatchLevel.PARTIAL:
@@ -122,6 +124,27 @@ namespace UnizenBot.Commands
                     return "Most likely match";
                 case SearchMatchLevel.EXACT:
                     return "Exact match";
+                default:
+                    throw new InvalidOperationException("Match level could not be adapted: " + matchLevel);
+            }
+        }
+
+        internal static string AdaptMatchLevelPlural(SearchMatchLevel matchLevel)
+        {
+            switch (matchLevel)
+            {
+                case SearchMatchLevel.DID_YOU_MEAN:
+                    return "Did you mean";
+                case SearchMatchLevel.BACKUP:
+                    return "Backup matches";
+                case SearchMatchLevel.PARTIAL:
+                    return "Partial matches";
+                case SearchMatchLevel.SIMILAR:
+                    return "Similar matches";
+                case SearchMatchLevel.VERY_SIMILAR:
+                    return "Most likely matches";
+                case SearchMatchLevel.EXACT:
+                    return "Exact matches";
                 default:
                     throw new InvalidOperationException("Match level could not be adapted: " + matchLevel);
             }
