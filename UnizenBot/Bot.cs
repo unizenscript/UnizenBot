@@ -206,8 +206,9 @@ namespace UnizenBot
             }
             if (searchInput == "all")
             {
+                string allOf = typeof(T) == typeof(IDenizenMetaType) ? "meta" : (Meta.KnownMetaTypeNames[typeof(T)] + "s");
                 List<Embed> pages = command.Bot.Meta.AllOf<T>().Paginate((tag) => tag.GetListString())
-                    .Select((page) => new EmbedBuilder().WithColor(Color.Gold).WithTitle("All known " + Meta.KnownMetaTypeNames[typeof(T)] + "s").WithDescription(page).Build())
+                    .Select((page) => new EmbedBuilder().WithColor(Color.Gold).WithTitle("All known " + allOf).WithDescription(page).Build())
                     .ToList();
                 await command.ReplyAsync(new DiscordPaginatedMessage(pages));
                 return;
