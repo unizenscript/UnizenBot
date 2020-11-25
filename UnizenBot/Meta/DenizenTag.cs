@@ -54,7 +54,7 @@ namespace UnizenBot.Meta
             return "!t " + Attribute.Value;
         }
 
-        private string StripTag(string tag)
+        private static string StripTag(string tag)
         {
             tag = tag.Trim();
             if (tag.StartsWith('<'))
@@ -69,7 +69,27 @@ namespace UnizenBot.Meta
             while (open >= 0)
             {
                 string first = tag.Substring(0, open);
-                string second = tag.Substring(tag.IndexOf(']') + 1);
+                int close = tag.IndexOf(']');
+                string second;
+                if (close == -1)
+                {
+                    // bad meta, try to fix
+                    int nextDot = tag.IndexOf('.', open);
+                    if (nextDot == -1)
+                    {
+                        // assume the closing bracket should finish off the tag
+                        second = string.Empty;
+                    }
+                    else
+                    {
+                        // assume the closing bracket should precede the next dot
+                        second = tag.Substring(nextDot - 1);
+                    }
+                }
+                else
+                {
+                    second = tag.Substring(close + 1);
+                }
                 tag = first + second;
                 open = tag.IndexOf('[');
             }
